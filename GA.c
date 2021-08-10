@@ -81,7 +81,7 @@ assign_taskattrs_zero(taskattrs_t *taskattrs) //무조건 0만 넣어줌.
 }
 
 static void
-assign_taskattrs_three(taskattrs_t *taskattrs) //무조건 0만 넣어줌.
+assign_taskattrs_three(taskattrs_t *taskattrs) //무조건 3만 넣어줌.
 {
 
 	int i; 
