@@ -82,16 +82,16 @@ parse_conf(FILE *fp)
 			continue;
 		switch (check_section(buf)) {
 		case SECT_GENETIC:
-			parse_genetic(fp);//
+			parse_genetic(fp);
 			break;
 		case SECT_GENTASK:
 			skip_section(fp);
 			break;
 		case SECT_CPUFREQ:
-			parse_cpufreq(fp);//
+			parse_cpufreq(fp);
 			break;
 		case SECT_MEM:
-			parse_mem(fp);//
+			parse_mem(fp);
 			break;
 		case SECT_TASK:
 			if (n_cpufreqs == 0) {

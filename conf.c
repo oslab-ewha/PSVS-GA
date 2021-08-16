@@ -91,7 +91,7 @@ load_conf(const char *fpath)
 {
 	FILE	*fp;
 
-	fp = fopen(fpath, "r"); //gastask.conf 파일 오픈
+	fp = fopen(fpath, "r");
 	if (fp == NULL) {
 		FATAL(1, "configuration not found: %s", fpath);
 	}

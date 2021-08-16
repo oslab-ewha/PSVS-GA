@@ -3,7 +3,7 @@
 #define MAX_TRY	10000
 
 unsigned	n_pops = 100;
-unsigned	max_gen = 100000;
+unsigned	max_gen = 10000;
 
 double		cutoff, penalty;
 
@@ -11,11 +11,11 @@ LIST_HEAD(genes_by_util);
 LIST_HEAD(genes_by_power);
 LIST_HEAD(genes_by_score);
 
-double swapRatio[4] = {0, 0.125, 0.25, 0.5}; //선언
+double swapRatio[4] = {0, 0.125, 0.25, 0.5};
 
 gene_t	*genes;
 
-#if 0 //컴파일 안됨
+#if 0 
 
 static void
 show_gene(gene_t *gene)
@@ -45,9 +45,9 @@ setup_taskattrs(taskattrs_t *taskattrs)
 
 	for (i = 0; i < n_tasks; i++) {
 		unsigned	attrtype = taskattrs->attrs[i];
-		taskattrs->n_tasks_per_type[attrtype]++; //type 별 task 수
+		taskattrs->n_tasks_per_type[attrtype]++; 
 		if (taskattrs->n_tasks_per_type[taskattrs->max_type] < taskattrs->n_tasks_per_type[attrtype]) {
-			taskattrs->max_type = attrtype; //type 별 task 수 제일 많은 것이 max_type
+			taskattrs->max_type = attrtype;
 		}
 	}
 	
@@ -56,7 +56,7 @@ setup_taskattrs(taskattrs_t *taskattrs)
 static void
 assign_taskattrs(taskattrs_t *taskattrs, unsigned max_value)
 {
-	int	i; //기본 코드
+	int	i;
 
 	for (i = 0; i < n_tasks; i++) {
 		unsigned	attrtype = get_rand(max_value); 
@@ -64,30 +64,16 @@ assign_taskattrs(taskattrs_t *taskattrs, unsigned max_value)
 	}
 	
 	setup_taskattrs(taskattrs);
-} //유전 알고리즘 표현하는 string???
+}
 
 static void
-assign_taskattrs_zero(taskattrs_t *taskattrs) //무조건 0만 넣어줌.
+assign_taskattrs_zero(taskattrs_t *taskattrs) //유전 알고리즘 스트링에 0을 주입
 {
 
 	int i; 
 
 	for (i=0; i<n_tasks; i++){
 		unsigned attrtype = 0;
-		taskattrs->attrs[i] = attrtype;
-	}
-	
-	setup_taskattrs(taskattrs);
-}
-
-static void
-assign_taskattrs_three(taskattrs_t *taskattrs) //무조건 3만 넣어줌.
-{
-
-	int i; 
-
-	for (i=0; i<n_tasks; i++){
-		unsigned attrtype = 3;
 		taskattrs->attrs[i] = attrtype;
 	}
 	
@@ -102,7 +88,7 @@ sort_gene_util(gene_t *gene)
 	list_del_init(&gene->list_util);
 
 	list_for_each (lp, &genes_by_util) {
-		gene_t	*gene_list = list_entry(lp, gene_t, list_util); //list_entry - get the struct for this entry
+		gene_t	*gene_list = list_entry(lp, gene_t, list_util);
 		if (gene->util < gene_list->util) {
 			list_add_tail(&gene->list_util, &gene_list->list_util);
 			return;
@@ -154,44 +140,40 @@ sort_gene(gene_t *gene)
 } //sort...
 
 static BOOL
-check_memusage(gene_t *gene) //각 task 별 memreq를 모두 더해서 DRAM과 LPM의 max_capacity를 초과하는 지 검사하는 메소드
+check_memusage(gene_t *gene)
 {
 	unsigned	mem_used[MAX_MEMS] = { 0, };
-	unsigned	task_mem_req; //
+	unsigned	task_mem_req; 
 	int	i;
 
-	taskattrs_t	*taskattrs = &gene->taskattrs_mem;//
-	double swap;//
+	taskattrs_t	*taskattrs = &gene->taskattrs_mem;
+	double swap;
 
 	for (i = 0; i < n_tasks; i++) {
-		// mem_used[gene->taskattrs_mem.attrs[i]] += get_task_memreq(i); //task의 memreq 더함
-
 		swap = swapRatio[taskattrs->attrs[i]];
 		task_mem_req = get_task_memreq(i);
 		mem_used[0] += task_mem_req * (1-swap); // DRAM
-		mem_used[1] += task_mem_req * swap; // 고속 storage
-		//printf("%u %u\n", (unsigned)mem_used[0], (unsigned)mem_used[1]); //debug
+		mem_used[1] += task_mem_req * swap; // 고속 스토리지
 	}
-	//printf("final: %u %u\n", (unsigned)mem_used[0], (unsigned)mem_used[1]); //debug
 
 	for (i = 0; i < n_mems; i++) {
-		if (mem_used[i] > mems[i].max_capacity) // 0 = dram, 1 = 고속 storage
+		if (mem_used[i] > mems[i].max_capacity)
 			return FALSE;
 	}
 	gene->dram_used = mem_used[0]; //DRAM 사용량 저장
 	return TRUE;
 }
 
-//DRAM과 nvram 중 더많은 task가 할당되어 있는 곳에서 task 하나의 위치를 변경하여 balance를 맞추는 메소드
+
 static void
 balance_mem_types(gene_t *gene)
 {
 	taskattrs_t	*taskattrs = &gene->taskattrs_mem;
 	unsigned	n_tasks_type;
 
-	n_tasks_type = taskattrs->n_tasks_per_type[taskattrs->max_type]; //max_type인 task의 개수
+	n_tasks_type = taskattrs->n_tasks_per_type[taskattrs->max_type]; 
 	if (n_tasks_type > 0) {
-		unsigned	idx_changed = get_rand(n_tasks_type); //max_type인 task 중에서 바꿀 task의 idx(몇번째 task의 type을 변경할 것인지)
+		unsigned	idx_changed = get_rand(n_tasks_type);
 		unsigned	type_new;
 		unsigned	i;
 		
@@ -202,27 +184,27 @@ balance_mem_types(gene_t *gene)
 				idx_changed--;
 			}
 		}
-		// type_new = get_rand_except(n_mems, taskattrs->max_type); //max_type을 제외한 0~n_mems 까지 랜덤 생성
-		type_new = get_rand_except(4, taskattrs->max_type); //
-		taskattrs->attrs[i] = type_new; //type_new 로 바꿈.
-		taskattrs->n_tasks_per_type[taskattrs->max_type]--; //max_type인 task 개수 하나 감소
-		taskattrs->n_tasks_per_type[type_new]++; //type_new인 task 개수 하나 증가
+		
+		type_new = get_rand_except(4, taskattrs->max_type); 
+		taskattrs->attrs[i] = type_new; 
+		taskattrs->n_tasks_per_type[taskattrs->max_type]--; 
+		taskattrs->n_tasks_per_type[type_new]++; 
 		if (taskattrs->n_tasks_per_type[taskattrs->max_type] < taskattrs->n_tasks_per_type[type_new]) {
 			taskattrs->max_type = type_new;
-		} //max_type보다 개수가 많아지게 된다면 max_type을 type_new로 갱신
+		}
 		
 	}
 }
 
 static BOOL
-lower_utilization_by_attr(taskattrs_t *taskattrs) //그대로 가도 괜찮을 듯?
+lower_utilization_by_attr(taskattrs_t *taskattrs) 
 {
 	unsigned	idx_org, idx;
 	
-	idx_org = idx = get_rand(n_tasks); //변경할 task의 인덱스
+	idx_org = idx = get_rand(n_tasks); 
 	do {
 		unsigned	type = taskattrs->attrs[idx];
-		if (type > 0) { //type>0인 것만 type-- 로 바꿔줌. utilization을 낮춰야 하니까!
+		if (type > 0) {
 			taskattrs->attrs[idx]--;
 			
 			taskattrs->n_tasks_per_type[type]--;
@@ -262,24 +244,23 @@ check_utilpower(gene_t *gene)
 		
 		get_task_utilpower(i, gene->taskattrs_mem.attrs[i], gene->taskattrs_cpufreq.attrs[i],
 				   &task_util, &task_power_cpu, &task_power_mem);
-		util_new += task_util; // U
-		power_new_sum_cpu += task_power_cpu; //모든 task의 Ecpu 합
-		power_new_sum_mem += task_power_mem; //모든 task의 Emem 합
+		util_new += task_util;
+		power_new_sum_cpu += task_power_cpu;
+		power_new_sum_mem += task_power_mem;
 	}
-	power_new = power_new_sum_cpu + power_new_sum_mem; //모든 task의 (Ecpu+Emem) 합
-	gene->cpu_power = power_new_sum_cpu;
+	power_new = power_new_sum_cpu + power_new_sum_mem;
+	gene->cpu_power = power_new_sum_cpu; //CPU power와 Memory powr 구분하여 저장
 	gene->mem_power = power_new_sum_mem;
 
 	if (util_new < 1.0) {
-		power_new += cpufreqs[n_cpufreqs - 1].power_idle * (1 - util_new); //idle interval에서의 power?
-		//cpufreqs[n_cpufreqs-1] --> 제일 낮은 freq = 제일 작은 power_idle ??
+		power_new += cpufreqs[n_cpufreqs - 1].power_idle * (1 - util_new);
 	}
-	gene->util = util_new; //utilization
-	if (util_new <= cutoff) { //cutoff  --> 1.2 
-		gene->power = power_new; //power
+	gene->util = util_new; 
+	if (util_new <= cutoff) {
+		gene->power = power_new; 
 		gene->score = power_new; 
-		if (util_new >= 1.0) // utilization 1보다 크면 penalty 곱하여 score 산출
-			gene->score += power_new * (util_new - 1.0) * penalty; //score
+		if (util_new >= 1.0)
+			gene->score += power_new * (util_new - 1.0) * penalty; 
 		return TRUE;
 	}
 	return FALSE;
@@ -289,26 +270,22 @@ static void
 init_gene(gene_t *gene)
 {
 	int	i;
+	/*
+		실험 조건에 따라 assign_taskattrs()와 asign_taskattrs_zero()를 적절히 사용
+	*/
 
 //	assign_taskattrs_zero(&gene->taskattrs_mem);
-	assign_taskattrs(&gene->taskattrs_mem, 4); //n_mems 가 아니라 swap ratio에 따라 max_value 값을 넣어줘야 함
-//	assign_taskattrs_three(&gene->taskattrs_mem);
+	assign_taskattrs(&gene->taskattrs_mem, 4);
 
-	// max value = 4: 0, 1, 2, 3 = [0, 0.125, 0.25, 0.5]
-	// extern double swapRatio[] = [0, 0.125, 0.25, 0.5] --> swapRatio[taskattrs_mem.attrs[i]]
 //	assign_taskattrs_zero(&gene->taskattrs_cpufreq);
 	assign_taskattrs(&gene->taskattrs_cpufreq, n_cpufreqs);
-
-	// for (i = 0; i < n_tasks; i++) {
-	// 	printf("%u %u\n", (unsigned)gene->taskattrs_mem.attrs[i], (unsigned)gene->taskattrs_cpufreq.attrs[i]); //debug
-	// }
 
 	for (i = 0; i < MAX_TRY; i++) {
 		INIT_LIST_HEAD(&gene->list_util);
 		INIT_LIST_HEAD(&gene->list_power);
 		INIT_LIST_HEAD(&gene->list_score);
 
-		if (!check_memusage(gene)) { //DRAM과 nvram의 max_capacity를 초과하는 지 검사 --> DRAM과 고속 storage 사용할때는
+		if (!check_memusage(gene)) { 
 			balance_mem_types(gene);
 			continue;
 		}
@@ -332,10 +309,10 @@ init_populations(void)
 	gene = genes = (gene_t *)calloc(n_pops, sizeof(gene_t));
 
 	for (i = 0; i < n_pops; i++, gene++) {
-		init_gene(gene); //generation 생성
+		init_gene(gene); 
 		util_sum += gene->util;
 	}
-	printf("initial utilization: %lf\n", util_sum / n_pops); //solution set의 평균 utilization
+	printf("initial utilization: %lf\n", util_sum / n_pops); 
 }
 
 static void
@@ -436,8 +413,8 @@ run_GA(void)
 {
 	unsigned	gen = 1;
 
-	init_report(); //report.txt 생성
-	init_populations(); //first solution set 생성?
+	init_report(); 
+	init_populations();
 
 	add_report(gen);
 

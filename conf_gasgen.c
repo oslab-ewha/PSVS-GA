@@ -24,10 +24,10 @@ parse_gentask(FILE *fp)
 			FATAL(2, "target utilization cannot be smaller than full utilzation");
 		}
 	}
-} // *gentask 값 변수에 옮기기
+}
 
 void
-parse_conf(FILE *fp) //gastask.conf 파일 parsing
+parse_conf(FILE *fp)
 {
 	char	buf[1024];
 
@@ -41,10 +41,10 @@ parse_conf(FILE *fp) //gastask.conf 파일 parsing
 			skip_section(fp);
 			break;
 		case SECT_MEM:
-			parse_mem(fp); //
+			parse_mem(fp); 
 			break;
 		case SECT_GENTASK:
-			parse_gentask(fp); //
+			parse_gentask(fp); 
 			break;
 		default:
 			errmsg("unknown section: %s", trim(buf));

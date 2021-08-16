@@ -63,9 +63,9 @@ parse_args(int argc, char *argv[])
 }
 
 int
-main(int argc, char *argv[]) // ./gastask gastask.conf
+main(int argc, char *argv[])
 {
-	parse_args(argc, argv); //gastask.conf 파일 읽어오기 - *genetic,*cpufreq,*mem,*task
+	parse_args(argc, argv);
 //	srand(seed);
 	srand(getpid() + time(NULL));
 	

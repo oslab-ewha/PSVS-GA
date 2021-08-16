@@ -32,7 +32,7 @@ parse_args(int argc, char *argv[])
 {
 	int	c;
 
-	while ((c = getopt(argc, argv, "s:h")) != -1) { //command-line option
+	while ((c = getopt(argc, argv, "s:h")) != -1) { 
 		switch (c) {
 		case 'h':
 			usage();
@@ -53,10 +53,10 @@ parse_args(int argc, char *argv[])
 }
 
 int
-main(int argc, char *argv[]) //# ./gasgen gastask.conf
+main(int argc, char *argv[]) 
 {
-	parse_args(argc, argv); //gastask.conf 파일 parsing - mem, gentask
-	srand(getpid() + time(NULL)); //실행할 때마다 다른 난수 생성
+	parse_args(argc, argv); 
+	srand(getpid() + time(NULL)); 
 
 	gen_task();
 

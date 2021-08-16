@@ -8,7 +8,7 @@ add_mem(const char *typestr, unsigned max_capacity, double wcet_scale, double po
 {
 	mem_t	*mem;
 
-	if (n_mems >= MAX_MEMS) { //MAX_MEMS = 5
+	if (n_mems >= MAX_MEMS) {
 		FATAL(2, "too many memory types");
 	}
 
@@ -19,4 +19,4 @@ add_mem(const char *typestr, unsigned max_capacity, double wcet_scale, double po
 	mem->power_active = power_active;
 	mem->power_idle = power_idle;
 	n_mems++;
-} //gastask.conf 의 *mem 섹션의 값 add
+}

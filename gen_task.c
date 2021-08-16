@@ -15,12 +15,11 @@ do_gen_task(FILE *fp)
 	unsigned	duration, memreq;
 	double		mem_active_ratio;
 
-	wcet = wcet_min + get_rand(wcet_max - wcet_min + 1); //get_rand -> util.c
+	wcet = wcet_min + get_rand(wcet_max - wcet_min + 1);
 	duration = (unsigned)(wcet / util_cpu_1task);
 	duration = duration + (int)get_rand(duration / 2) - (int)get_rand(duration / 2);
 
-	memreq = memreq_1task + (int)get_rand(memreq_1task / 2) - (int)get_rand(memreq_1task / 2); //memreq_1task 부근의 값이 나옴
-//	memreq = 5 + (int)get_rand(5 / 2) - (int)get_rand(5 / 2);
+	memreq = memreq_1task + (int)get_rand(memreq_1task / 2) - (int)get_rand(memreq_1task / 2);
 	mem_active_ratio = 0.1 + get_rand(1000) / 10000.0 - get_rand(1000) / 10000.0; 
 
 	util_sum_cpu += ((double)wcet / duration);
@@ -30,10 +29,10 @@ do_gen_task(FILE *fp)
 }
 
 static double
-get_mem_util(void) //0.7
+get_mem_util(void) 
 {
-	double	util_bymem = util_target - util_cpu; //util_target = util_cpu + util_bymem
-	double	util_mem = 1.0 / n_mems; //0.5
+	double	util_bymem = util_target - util_cpu;
+	double	util_mem = 1.0 / n_mems;
 	int	i;
 
 	for (i = 1; i < n_mems && util_bymem > 0; i++) {
@@ -50,7 +49,7 @@ get_mem_util(void) //0.7
 	}
 
 	return util_mem;
-} //......
+}
 
 static double
 get_util_overhead_bymem(unsigned mem_used)
@@ -82,8 +81,8 @@ gen_task(void)
 	double	util_mem_1task;
 	unsigned	i;
 
-	util_cpu_1task = util_cpu / n_tasks_target; //1task에 사용가능한 cpu?
-	util_mem_1task = get_mem_util() / n_tasks_target; //n_tasks_target = n_tasks
+	util_cpu_1task = util_cpu / n_tasks_target;
+	util_mem_1task = get_mem_util() / n_tasks_target;
 	memreq_1task = mem_total * util_mem_1task;
 	printf("%u %f %f\n", memreq_1task, util_mem_1task, get_mem_util());
 

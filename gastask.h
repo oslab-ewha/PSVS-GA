@@ -44,6 +44,7 @@ extern unsigned	n_pops;
 
 extern struct list_head	genes_by_util;
 extern struct list_head	genes_by_power;
+extern struct list_head genes_by_score;
 extern gene_t	*genes;
 extern cpufreq_t	cpufreqs[];
 
@@ -54,7 +55,7 @@ extern double	power_consumed_mem_active;
 extern double	power_consumed_cpu_idle;
 extern double	power_consumed_mem_idle;
 
-extern double swapRatio[]; ///전역 변수 swapRatio
+extern double swapRatio[];
 
 void add_mem(const char *typestr, unsigned max_capacity, double wcet_scale, double power_active, double power_idle);
 void add_cpufreq(double wcet_scale, double power_active, double power_idle);
