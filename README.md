@@ -1,5 +1,5 @@
-# gastask(GA for Scheduling real-time TASKs) 
-This project demonstrates that a GA (genetic algorithm) approach can provide power-efficient scheduling for real-time tasks that makes use of DVS (dynamic voltage scaling) and HM (Hybrid Memory).
+# PSVS-GA(Partial Swap & Voltage Scaling for GA)
+This project demonstrates that a GA (genetic algorithm) approach can provide power-efficient scheduling for real-time tasks that makes use of DRAM memory swap and DVS (dynamic voltage scaling).
 
 Two executables included in this project.
 - gasgen: task generation tool based on CPU and total utilization
