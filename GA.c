@@ -40,7 +40,7 @@ setup_taskattrs(taskattrs_t *taskattrs)
 {
 	int	i;
 
-	memset(taskattrs->n_tasks_per_type, 0, MAX_ATTRTYPES);
+	memset(taskattrs->n_tasks_per_type, 0, MAX_ATTRTYPES * sizeof(unsigned));
 	taskattrs->max_type = 0;
 
 	for (i = 0; i < n_tasks; i++) {
@@ -66,8 +66,9 @@ assign_taskattrs(taskattrs_t *taskattrs, unsigned max_value)
 	setup_taskattrs(taskattrs);
 }
 
+#if 0 ///Not Used
 static void
-assign_taskattrs_zero(taskattrs_t *taskattrs) //유전 알고리즘 스트링에 0을 주입
+assign_taskattrs_zero(taskattrs_t *taskattrs) //insert 0 into GA strings
 {
 
 	int i; 
@@ -79,6 +80,7 @@ assign_taskattrs_zero(taskattrs_t *taskattrs) //유전 알고리즘 스트링에
 	
 	setup_taskattrs(taskattrs);
 }
+#endif
 
 static void
 sort_gene_util(gene_t *gene)
@@ -153,14 +155,14 @@ check_memusage(gene_t *gene)
 		swap = swapRatio[taskattrs->attrs[i]];
 		task_mem_req = get_task_memreq(i);
 		mem_used[0] += task_mem_req * (1-swap); // DRAM
-		mem_used[1] += task_mem_req * swap; // 고속 스토리지
+		mem_used[1] += task_mem_req * swap; // Fast storage
 	}
 
 	for (i = 0; i < n_mems; i++) {
 		if (mem_used[i] > mems[i].max_capacity)
 			return FALSE;
 	}
-	gene->dram_used = mem_used[0]; //DRAM 사용량 저장
+	gene->dram_used = mem_used[0]; //store DRAM usage
 	return TRUE;
 }
 
@@ -249,7 +251,7 @@ check_utilpower(gene_t *gene)
 		power_new_sum_mem += task_power_mem;
 	}
 	power_new = power_new_sum_cpu + power_new_sum_mem;
-	gene->cpu_power = power_new_sum_cpu; //CPU power와 Memory powr 구분하여 저장
+	gene->cpu_power = power_new_sum_cpu; //store CPU and Memory power separately
 	gene->mem_power = power_new_sum_mem;
 
 	if (util_new < 1.0) {
@@ -271,8 +273,8 @@ init_gene(gene_t *gene)
 {
 	int	i;
 	/*
-		실험 조건에 따라 assign_taskattrs()와 asign_taskattrs_zero()를 적절히 사용
-	*/
+	 * use properly assign_taskattrs() & asign_taskattrs_zero() depending on experimental conditions
+	 */
 
 //	assign_taskattrs_zero(&gene->taskattrs_mem);
 	assign_taskattrs(&gene->taskattrs_mem, 4);

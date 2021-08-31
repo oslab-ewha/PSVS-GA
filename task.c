@@ -12,7 +12,6 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cpufr
 
 	double	wcet_scaled_cpu = 1 / cpufreq->wcet_scale; 
 	double	wcet_scaled_dram = 1 / mems[0].wcet_scale;
-	double  wcet_scaled_storage = 1 / mems[1].wcet_scale;
 	double 	wcet_scaled_mem; //
 	double 	mem_power_active; //
 	double  mem_power_stat;

@@ -97,6 +97,5 @@ load_conf(const char *fpath)
 	}
 
 	parse_conf(fp);
-
 	fclose(fp);
 }

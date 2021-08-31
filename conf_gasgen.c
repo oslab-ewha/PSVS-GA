@@ -47,6 +47,7 @@ parse_conf(FILE *fp)
 			parse_gentask(fp); 
 			break;
 		default:
+			/* error */
 			errmsg("unknown section: %s", trim(buf));
 			FATAL(2, "cannot load configuration");
 		}
