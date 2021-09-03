@@ -10,8 +10,8 @@ void
 add_report(unsigned gen)
 {
 	/*
-		report.txt에 score_min, score_avg, score_max 추가
-	*/
+	 * add score_min, score_avg, score_max to report.txt
+	 */
 	double	util_sum = 0, power_sum = 0, score_sum = 0;
 	double	util_avg, power_avg, score_avg = -1;
 	double	util_min, util_max, power_min, score_min = -1, power_max, score_max;

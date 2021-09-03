@@ -61,6 +61,7 @@ parse_task(FILE *fp)
 			fseek(fp, -1 * strlen(buf), SEEK_CUR);
 			return;
 		}
+
 		if (sscanf(buf, "%u %u %u %lf", &wcet, &period, &memreq, &mem_active_ratio) != 4) {
 			FATAL(2, "cannot load configuration: invalid task format: %s", trim(buf));
 		}

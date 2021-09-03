@@ -52,6 +52,7 @@ parse_args(int argc, char *argv[])
 	load_conf(argv[optind]);
 }
 
+/* main */
 int
 main(int argc, char *argv[]) 
 {

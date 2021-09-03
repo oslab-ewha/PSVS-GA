@@ -18,7 +18,7 @@ typedef struct {
 typedef struct {
 	taskattrs_t	taskattrs_mem;
 	taskattrs_t	taskattrs_cpufreq;
-	double		util, power, score, mem_power, cpu_power, dram_used; //mem_power, cpu_power, dram_used 추가
+	double		util, power, score, mem_power, cpu_power, dram_used; //add mem_power, cpu_power, dram_used
 	struct list_head	list_util;
 	struct list_head	list_power;
 	struct list_head	list_score;

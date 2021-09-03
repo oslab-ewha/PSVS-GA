@@ -87,6 +87,7 @@ gen_task(void)
 	printf("%u %f %f\n", memreq_1task, util_mem_1task, get_mem_util());
 
 	fp = fopen("task_generated.txt", "w");
+
 	if (fp == NULL) {
 		FATAL(2, "cannot open task_generated.txt");
 	}

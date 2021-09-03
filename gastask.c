@@ -66,7 +66,9 @@ int
 main(int argc, char *argv[])
 {
 	parse_args(argc, argv);
-//	srand(seed);
+#if 0
+	srand(seed);
+#endif
 	srand(getpid() + time(NULL));
 	
 	run_GA();
